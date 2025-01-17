@@ -1,0 +1,24 @@
+[package]
+name = "oauth2_login"
+version = "0.1.0"
+edition = "2021"
+authors = ["Itsuki <itsuki.enjoy@google.com>"]
+description = "Oauth2 login"
+readme = "README.md"
+repository = "https://github.com/0Itsuki0/rust_oauth2_login"
+license = "Apache-2.0"
+license-file = "LICENSE"
+keywords = ["auth", "oauth", "oauth2", "google", "cli"]
+categories = ["authentication", "web-programming"]
+
+[dependencies]
+axum = { version = "0.8.1", features = ["multipart", "macros"] }
+derive_builder = "0.20.2"
+headless_chrome = "1.0.15"
+oauth2 = "4.4.2"
+reqwest = { version = "0.12.12", features = ["json"] }
+serde = { version = "1.0.217", features = ["derive"] }
+serde_json = "1.0.135"
+thiserror = "2.0.11"
+tokio = { version = "1.43.0", features = ["full"] }
+url = "2.5.4"
