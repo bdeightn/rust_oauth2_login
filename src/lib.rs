@@ -1,5 +1,6 @@
 use std::{
     ffi::OsStr,
+    path::PathBuf,
     sync::{
         mpsc::{channel, Sender},
         Arc,
@@ -63,8 +64,8 @@ pub struct RequestTokenOptions {
     #[builder(default = "vec![]")]
     pub extra_params: Vec<String>,
 
-    #[builder(default = "vec![]")]
-    pub browser_args: Vec<String>,
+    #[builder(default = "None")]
+    pub browser_args: Option<PathBuf>,
 }
 
 impl Default for RequestTokenOptions {
@@ -77,7 +78,7 @@ impl Default for RequestTokenOptions {
             browser_window_size: None,
             idle_browser_timeout: Duration::from_secs(30),
             extra_params: vec![],
-            browser_args: vec![],
+            browser_args: None,
         }
     }
 }
@@ -124,6 +125,7 @@ pub async fn request_token(
             headless: false,
             ignore_certificate_errors: false,
             disable_default_args: true,
+            user_data_dir: options.browser_args,
             args: vec![],
             idle_browser_timeout: options.idle_browser_timeout,
             ..Default::default()
