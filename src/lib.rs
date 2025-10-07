@@ -57,8 +57,8 @@ pub struct RequestTokenOptions {
     #[builder(default = "Duration::from_secs(30)")]
     pub idle_browser_timeout: Duration,
 
-    /// Allows for the use of the account picker by way of:
-    /// &params=select_account
+    /// Provides a way to append "params" to the url. This enables the account picker on google oauth.
+    /// e.g: &params=select_account
     #[builder(default = "Some(vec![])")]
     pub extra_params: Option<Vec<String>>,
 }
