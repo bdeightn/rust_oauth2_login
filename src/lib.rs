@@ -1,4 +1,5 @@
 use std::{
+    ffi::OsStr,
     sync::{
         mpsc::{channel, Sender},
         Arc,
@@ -61,6 +62,9 @@ pub struct RequestTokenOptions {
     /// e.g: &params=select_account
     #[builder(default = "vec![]")]
     pub extra_params: Vec<String>,
+
+    #[builder(default = "vec![]")]
+    pub browser_args: Vec<String>,
 }
 
 impl Default for RequestTokenOptions {
@@ -73,6 +77,7 @@ impl Default for RequestTokenOptions {
             browser_window_size: None,
             idle_browser_timeout: Duration::from_secs(30),
             extra_params: vec![],
+            browser_args: vec![],
         }
     }
 }
@@ -212,7 +217,7 @@ async fn handle_google_callback(
         return error.into_response();
     }
     if params.success.is_none() {
-        let error = ApiError::AuthError("unknwon".to_owned());
+        let error = ApiError::AuthError("unknown".to_owned());
         send_message(state.sender.clone(), Message::ApiError(error.clone()));
         return error.into_response();
     }
