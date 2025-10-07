@@ -59,8 +59,8 @@ pub struct RequestTokenOptions {
 
     /// Provides a way to append "params" to the url. This enables the account picker on google oauth.
     /// e.g: &params=select_account
-    #[builder(default = "Some(vec![])")]
-    pub extra_params: Option<Vec<String>>,
+    #[builder(default = "vec![]")]
+    pub extra_params: Vec<String>,
 }
 
 impl Default for RequestTokenOptions {
@@ -72,7 +72,7 @@ impl Default for RequestTokenOptions {
             scopes: vec![],
             browser_window_size: None,
             idle_browser_timeout: Duration::from_secs(30),
-            extra_params: Some(vec![]),
+            extra_params: vec![],
         }
     }
 }
@@ -249,7 +249,7 @@ fn send_message(sender: Sender<Message>, message: Message) {
 fn get_auth_url(
     basic_client: &BasicClient,
     scopes: &Vec<String>,
-    extra_params: &Option<Vec<String>>,
+    extra_params: &Vec<String>,
 ) -> (Url, CsrfToken) {
     let scopes: Vec<Scope> = scopes
         .into_iter()
@@ -261,13 +261,16 @@ fn get_auth_url(
         .add_scopes(scopes);
 
     // Check if extra_params exists and iterate through them
-    if let Some(params) = extra_params {
-        for param in params {
-            if let Some((key, value)) = param.split_once('=') {
-                // Add each parameter to the builder
-                auth_url_builder = auth_url_builder.add_extra_param(key, value);
+    match extra_params {
+        params => {
+            for param in params {
+                if let Some((key, value)) = param.split_once('=') {
+                    // Add each parameter to the builder
+                    auth_url_builder = auth_url_builder.add_extra_param(key, value);
+                }
             }
         }
+        _ => (),
     }
 
     // Finalize the URL
